@@ -30,8 +30,8 @@ def checking(func):
         if len(graphics_CLASS) == 0:
             raise Exception('Invalid graphics_CLASS: not an effective tuple')
         
-        if graphics_CLASS[0]['cl'] == 'vec' and func.__name__ == 'getting_angle':
-            if len(graphics_CLASS[0]['coordinate']) != 3:
+        if graphics_CLASS[0].cl == 'vector' and func.__name__ == 'getting_angle':
+            if len(graphics_CLASS[0].get_cl()['coordinate']) != 3:
                 raise Exception('{} Error: wrong graphics_CLASS'.format(func.__name__) 
                 + ''''s list''')
             return func(graphics_CLASS[0], graphics_CLASS[1])
