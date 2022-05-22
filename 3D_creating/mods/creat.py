@@ -37,15 +37,20 @@ class Point():
             "root": self.root,
             "cl": "point"
         }
-        
+        self.get_cl()
+
     def checking(self):
+        
         if len(self.coordinate) != 3:
             raise Exception('Invaild coordinate')
         if self.attribute not in ['base', 'none']:
             raise Exception('Invalid attribute')
     
     def get_cl(self):
-        return self.point
+        
+        simple = self.point
+        self.simple = simple
+        return simple
 
 
 #===================================================================
@@ -82,6 +87,7 @@ class Vector():
             'head_point': self.head_point,
             'cl': self.cl
         }
+        self.get_cl()
 
     def checking(self):
         '检测异常'
@@ -89,13 +95,23 @@ class Vector():
             self.coordinate.cl
         except AttributeError:
             raise Exception('Invalid object: coordinate must be point_CLASS')           
+        if self.attribute == 'base':
+            try: 
+                self.head_point.cl
+            except AttributeError:
+                raise Exception('Invalid object: head_point must be point_CLASS')
         if len(self.coordinate.coordinate) != 3:
             raise Exception('Invalid list: the list is wrong')
         if self.attribute not in ['base', 'none']:    
             raise Exception('Invalid attribute: the attribute is wrong')
     
     def get_cl(self):
-        return self.vector
+        
+        simple = self.vector.copy()
+        simple['coordinate'] = self.coordinate.get_cl()['coordinate']
+        simple['head_point'] = self.head_point.get_cl()['coordinate']
+        self.simple = simple
+        return simple
 
 
 #====================================================================================
@@ -127,6 +143,7 @@ class Line():
             'root': self.root,
             'child': self.child
         }
+        self.get_cl()
 
     def checking(self):
         '检查Straight_line_equ'
@@ -142,6 +159,8 @@ class Line():
             raise Exception('Invalid straight_line_equ')
     
     def get_cl(self):
+        simple = self.line
+        self.simple = simple
         return self.line
 
 #=========================================================================================
@@ -175,6 +194,7 @@ class Ray():
             'root': root,
             'child': self.child
         }
+        self.get_cl()
 
     def checking(self):
         '检查'
@@ -192,9 +212,13 @@ class Ray():
             raise Exception('Invalid Straight_line_equ: the Straight_line_equ is wrong')
 
     def get_cl(self):
-        return self.ray
+        
+        simple = self.ray.copy()
+        simple['dire_vector'] = self.dire_vector.simple['coordinate']
+        self.simple = simple
+        return simple
 
-#=======================================================================
+#===========================================================================
 #线段举例
 '''A line_seg :
         {
@@ -221,7 +245,8 @@ class  Line_seg():
             'key_point': self.key_point,
             'child': self.child
         }
-    
+        self.get_cl()
+
     def checking(self):
         '检查'
         if self.attribute not in ['base', 'none']:    
@@ -234,8 +259,12 @@ class  Line_seg():
                 raise Exception('Invalid key_point: the key_point is wrong')
     
     def get_cl(self):
-        return self.line_seg
+        
+        simple = self.line_seg.copy()
+        self.simple =simple
+        return self.simple
 
+#======================================================================================
 x1 = randint(1, 20)
 y1 = randint(1, 20)
 z1 = randint(1, 20)
@@ -247,8 +276,8 @@ f = []
 p1 = Point(coordinate=[x1,y1,z1],attribute='base', root=None)
 p2 = Point(coordinate=[x2,y2,z2],attribute='base', root=None)
 
-d1 = Vector(attribute='base', coordinate=p1, root=None)
-d2 = Vector(attribute='base', coordinate=p2, root=None)
+d1 = Vector(attribute='base', coordinate=p1, head_point = p2,root=None)
+d2 = Vector(attribute='base', coordinate=p2, head_point = p1,root=None)
 
 
 f = [p1,p2,d1,d2]
@@ -257,3 +286,4 @@ for i in f:
 
 print(getting_angle(d1,d2))
 l = Line(attribute='base',root=None,straight_line_equ={'equ1':'d','equ2':'f'})
+print(l.simple)
