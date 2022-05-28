@@ -1,6 +1,6 @@
 #-*-coding:utf-8-*-#
 
-#构建几何体的方法
+# 构建几何体的方法
 
 from math import *
 from threading import *
@@ -10,10 +10,10 @@ import sys
 import os
 
 
-#对象关系：基本=>point, vector
-#全部都为 graphics_CLASS,但是point, vector没有子对象
-#加'\'的为关键属性
-#点举例
+# 对象关系：基本=>point, vector
+# 全部都为 graphics_CLASS,但是point, vector没有子对象
+# 加'\'的为关键属性
+# 点举例
 '''   A point :
            {
                "coordinate"(坐标) : list,
@@ -22,9 +22,11 @@ import os
                "cl" : "point"
             }
 '''
+
+
 class Point():
     '''定义点类'''
-    
+
     def __init__(self, coordinate, attribute, root):
         self.coordinate = coordinate
         self.attribute = attribute
@@ -40,21 +42,23 @@ class Point():
         self.get_cl()
 
     def checking(self):
-        
+
         if len(self.coordinate) != 3:
-            raise Exception('Invaild coordinate')
+            raise Exception(
+                'Invaild coordinate')
         if self.attribute not in ['base', 'none']:
-            raise Exception('Invalid attribute')
-    
+            raise Exception(
+                'Invalid attribute')
+
     def get_cl(self):
-        
+
         simple = self.point
         self.simple = simple
         return simple
 
 
-#===================================================================
-#向量举例：
+# ===================================================================
+# 向量举例：
 '''   A vector :
            {
                
@@ -68,6 +72,7 @@ class Point():
                \"cl": "vectro"
            }
 '''
+
 
 class Vector():
     '''定义向量类'''
@@ -91,22 +96,29 @@ class Vector():
 
     def checking(self):
         '检测异常'
-        try: 
+        try:
             self.coordinate.cl
         except AttributeError:
-            raise Exception('Invalid object: coordinate must be point_CLASS')           
+            raise Exception(
+                'Invalid object: coordinate must be point_CLASS')
+        
         if self.attribute == 'base':
-            try: 
+            try:
                 self.head_point.cl
             except AttributeError:
-                raise Exception('Invalid object: head_point must be point_CLASS')
-        if len(self.coordinate.coordinate) != 3:
-            raise Exception('Invalid list: the list is wrong')
-        if self.attribute not in ['base', 'none']:    
-            raise Exception('Invalid attribute: the attribute is wrong')
-    
-    def get_cl(self):
+                raise Exception(
+                    'Invalid object: head_point must be point_CLASS')
         
+        if len(self.coordinate.coordinate) != 3:
+            raise Exception(
+                'Invalid list: the list is wrong')
+        
+        if self.attribute not in ['base', 'none']:
+            raise Exception(
+                'Invalid attribute: the attribute is wrong')
+
+    def get_cl(self):
+
         simple = self.vector.copy()
         simple['coordinate'] = self.coordinate.get_cl()['coordinate']
         simple['head_point'] = self.head_point.get_cl()['coordinate']
@@ -114,8 +126,8 @@ class Vector():
         return simple
 
 
-#====================================================================================
-#直线举例
+# ====================================================================================
+# 直线举例
 '''
 A line: 
         {
@@ -127,6 +139,8 @@ A line:
     'child': None or [graphics_CLASS] 
 }
 '''
+
+
 class Line():
     def __init__(self, attribute, straight_line_equ, root, child=None):
         '定义直线类'
@@ -139,7 +153,7 @@ class Line():
         self.line = {
             'cl': 'line',
             'attribute': self.attribute,
-            'Straight-line_equ': self.straight_line_equ,                                
+            'Straight-line_equ': self.straight_line_equ,
             'root': self.root,
             'child': self.child
         }
@@ -147,24 +161,33 @@ class Line():
 
     def checking(self):
         '检查Straight_line_equ'
-        if self.attribute not in ['base', 'none']:    
-            raise Exception('Invalid attribute: the attribute is wrong')
+        if self.attribute not in ['base', 'none']:
+            raise Exception(
+                'Invalid attribute: the attribute is wrong')
+        
         if self.attribute == 'base' and len(self.straight_line_equ) != 2:
-            raise Exception('Invalid Straight_line_equ: the Straight_line_equ is wrong')
+            raise Exception(
+                'Invalid Straight_line_equ: the Straight_line_equ is wrong')
+        
         if self.attribute == 'none' and len(self.straight_line_equ) != 1:
-            raise Exception('Invalid Straight_line_equ: the Straight_line_equ is wrong')
-        try :
+            raise Exception(
+                'Invalid Straight_line_equ: the Straight_line_equ is wrong')
+        
+        try:
             self.straight_line_equ['equ1']
+        
         except TypeError:
-            raise Exception('Invalid straight_line_equ')
-    
+            raise Exception(
+                'Invalid straight_line_equ')
+
     def get_cl(self):
         simple = self.line
         self.simple = simple
         return self.line
 
-#=========================================================================================
-#射线举例
+
+# =========================================================================================
+# 射线举例
 '''A ray :
         {
     \'cl': 'ray',
@@ -176,8 +199,11 @@ class Line():
     'child': None or [graphics_CLASS]
         }
 '''
+
+
 class Ray():
     '定义射线类'
+
     def __init__(self, dire_vector, attribute, straight_line_equ, root, child=None):
         self.cl = 'ray'
         self.dire_vector = dire_vector
@@ -198,28 +224,39 @@ class Ray():
 
     def checking(self):
         '检查'
-        if self.attribute not in ['base', 'none']:    
-            raise Exception('Invalid attribute: the attribute is wrong')
+        if self.attribute not in ['base', 'none']:
+            raise Exception(
+                'Invalid attribute: the attribute is wrong')
+        
         if self.dire_vector.cl != 'vector':
-            raise Exception('Invalid dire_vector')
+            raise Exception(
+                'Invalid dire_vector')
+        
         if self.dire_vector.attribute != 'base':
-            raise Exception('Invalid attribute: the deir_vector attribute is wrong')
-        try :
+            raise Exception(
+                'Invalid attribute: the deir_vector attribute is wrong')
+        
+        try:
             self.straight_line_equ['equ1']
+        
         except TypeError:
-            raise Exception('Invalid straight_line_equ')
-        if len(self.straight_line_equ) != 1:   
-            raise Exception('Invalid Straight_line_equ: the Straight_line_equ is wrong')
+            raise Exception(
+                'Invalid straight_line_equ')
+        
+        if len(self.straight_line_equ) != 1:
+            raise Exception(
+                'Invalid Straight_line_equ: the Straight_line_equ is wrong')
 
     def get_cl(self):
-        
+
         simple = self.ray.copy()
         simple['dire_vector'] = self.dire_vector.simple['coordinate']
         self.simple = simple
         return simple
 
-#===========================================================================
-#线段举例
+
+# ===========================================================================
+# 线段举例
 '''A line_seg :
         {
     \'cl': 'line_seg'.
@@ -229,8 +266,11 @@ class Ray():
     \'key_point': point class list,
         }
 '''
-class  Line_seg():
+
+
+class Line_seg():
     '定义线段'
+
     def __init__(self, attribute, root, key_point, child=None):
         self.cl = 'line_seg'
         self.attribute = attribute
@@ -249,22 +289,28 @@ class  Line_seg():
 
     def checking(self):
         '检查'
-        if self.attribute not in ['base', 'none']:    
-            raise Exception('Invalid attribute: the attribute is wrong')
-        if len(self.key_point) != 2:
-            raise Exception('Invalid key_point: the key_point is wrong')
-        else:
-            cl1 , cl2 = self.key_point
-            if [cl1['cl'], cl2['cl']] != ['point']:
-                raise Exception('Invalid key_point: the key_point is wrong')
-    
-    def get_cl(self):
+        if self.attribute not in ['base', 'none']:
+            raise Exception(
+                'Invalid attribute: the attribute is wrong')
         
+        if len(self.key_point) != 2:
+            raise Exception(
+                'Invalid key_point: the key_point is wrong')
+        
+        else:
+            cl1, cl2 = self.key_point
+            if [cl1['cl'], cl2['cl']] != ['point']:
+                raise Exception(
+                    'Invalid key_point: the key_point is wrong')
+
+    def get_cl(self):
+
         simple = self.line_seg.copy()
-        self.simple =simple
+        self.simple = simple
         return self.simple
 
-#======================================================================================
+
+# ======================================================================================
 x1 = randint(1, 20)
 y1 = randint(1, 20)
 z1 = randint(1, 20)
@@ -273,17 +319,19 @@ y2 = randint(1, 20)
 z2 = randint(1, 20)
 f = []
 
-p1 = Point(coordinate=[x1,y1,z1],attribute='base', root=None)
-p2 = Point(coordinate=[x2,y2,z2],attribute='base', root=None)
+p1 = Point(coordinate=[x1, y1, z1], attribute='base', root=None)
+p2 = Point(coordinate=[x2, y2, z2], attribute='base', root=None)
 
-d1 = Vector(attribute='base', coordinate=p1, head_point = p2,root=None)
-d2 = Vector(attribute='base', coordinate=p2, head_point = p1,root=None)
+d1 = Vector(attribute='base', coordinate=p1, head_point=p2, root=None)
+d2 = Vector(attribute='base', coordinate=p2, head_point=p1, root=None)
 
 
-f = [p1,p2,d1,d2]
+f = [p1, p2, d1, d2]
 for i in f:
     print(i.get_cl())
 
-print(getting_angle(d1,d2))
-l = Line(attribute='base',root=None,straight_line_equ={'equ1':'d','equ2':'f'})
+print(getting_angle(d1, d2))
+l = Line(attribute='base', root=None,
+         straight_line_equ={'equ1': 'd', 'equ2': 'f'})
 print(l.simple)
+print(getting_angle(d1, d2))
