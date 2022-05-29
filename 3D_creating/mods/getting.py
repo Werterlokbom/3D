@@ -1,4 +1,4 @@
-#-*-coding:utf-8-*-#
+# -*- coding: utf-8 -*-
 # 各种的运算
 
 import math
@@ -19,55 +19,79 @@ def changing_rad(rad):
     try:
         rad*rad
     except TypeError:
-        raise Exception('Invalid rad')
+        raise Exception(
+            'Invalid rad')
     return 180*rad/math.pi
 
 
 def checking(func):
     '执行检查的函数'
     '''
-    /只能检查向量运算
+    只能检查向量运算
     '''
     def return_func(*graphics_CLASS):
 
-        print(graphics_CLASS)
         if len(graphics_CLASS) == 0:
-            raise Exception('Invalid arg: not an effective tuple')
-        if len(graphics_CLASS) == 2:
-            if graphics_CLASS[0] == graphics_CLASS[1]:
-                raise Exception('Invalid arg: can not do thist to same obj')
+
+            raise Exception(
+                'Invalid Argph: not an effective tuple')
+
+        if func.__name__ == 'mold_solving':
+
+            if len(graphics_CLASS) != 1:
+
+                raise Exception(
+                    '''Invalid Argph: cann'not get mold to vecs''')
+
+            if graphics_CLASS[0].simple['coordinate'] != 'vector':
+                raise Exception(
+                    'Invalid Argph')
+
+            else:
+                return func(graphics_CLASS[0])    
 
         checker = []
+
         for i in range(1, len(graphics_CLASS)+1):
             checker.append(graphics_CLASS[i-1].cl)
 
-        if checker == ['vector', 'vector'] and func.__name__ == 'getting_angle':
+        if checker == ['vector', 'vector'] and \
+           func.__name__ == 'getting_angle':
+
             if len(graphics_CLASS[0].simple['coordinate']) != 3:
-                raise Exception('{} Error: wrong graphics_CLASS'.format(func.__name__)
-                                + ''''s list''')
+
+                raise Exception(
+                    '{} Error: wrong graphics_CLASS'.format(func.__name__)
+                    + ''''s list''')
+
             return func(graphics_CLASS[0], graphics_CLASS[1])
 
         if checker != ['vector', 'vector']:
             raise Exception(
                 'Invalid graphics_CLASS: can not do these to a point')
 
-        if graphics_CLASS[0].simple['cl'] == 'vector' and func.__name__ == 'mold_solving':
+        if graphics_CLASS[0].simple['cl'] == 'vector' and \
+           func.__name__ == 'mold_solving':
+
             return func(graphics_CLASS[0])
 
-        if graphics_CLASS[0].simple['cl'] == 'point' and func.__name__ in ['getting_angle', 'mold_solving']:
+        if graphics_CLASS[0].simple['cl'] == 'point' and \
+           func.__name__ in ['getting_angle', 'mold_solving']:
+
             raise Exception(
                 'Invalid graphics_CLASS: can not do these to a point')
 
         else:
             raise Exception('Invalid graphics_CLASS')
+
     return return_func
 
 
 def mold_solving(graphics_CLASS):
     '求向量的模'
-    i = graphics_CLASS.simple['coordinate'][0]**2 + \
-        graphics_CLASS.simple['coordinate'][1]**2 + \
-        graphics_CLASS.simple['coordinate'][2]**2
+    x, y, z = graphics_CLASS.simple['coordinate']
+    i = x**2 + y**2 + z**2
+
     return i**0.5
 
 
@@ -79,12 +103,8 @@ def getting_angle(graphics_CLASS, Normal_vectors):
     if mold == 0:
         raise Exception('Invalid graphics_CLASS: can not do this to 0-vec')
 
-    x1 = graphics_CLASS.simple['coordinate'][0]
-    x2 = Normal_vectors.simple['coordinate'][0]
-    y1 = graphics_CLASS.simple['coordinate'][1]
-    y2 = Normal_vectors.simple['coordinate'][1]
-    z1 = graphics_CLASS.simple['coordinate'][2]
-    z2 = Normal_vectors.simple['coordinate'][2]
+    x1, y1, z1 = graphics_CLASS.simple['coordinate']
+    x2, y2, z2 = Normal_vectors.simple['coordinate']
 
     cos_Angle = (x1*x2 + y1*y2 + z1*z2)/mold
     sin_Angle = (1 - cos_Angle**2)**0.5
