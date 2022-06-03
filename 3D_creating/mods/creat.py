@@ -335,3 +335,4 @@ l = Line(attribute='base', root=None,
          straight_line_equ={'equ1': 'd', 'equ2': 'f'})
 print(l.simple)
 print(getting_angle(d1, d2))
+input()
